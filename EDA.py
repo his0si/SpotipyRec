@@ -71,11 +71,51 @@ fig.show()
 top10_genres = genre_data.nlargest(10, 'popularity')
 
 # 상위 10개 장르의 주요 특성 비교
-# valence: 곡의 긍정적인 정도
-# energy: 곡의 에너지
-# danceability: 춤추기 적합도
-# acousticness: 어쿠스틱한 정도
 fig = px.bar(top10_genres, x='genres', y=['valence', 'energy', 'danceability', 'acousticness'], 
              barmode='group',
              title='Top 10 Genres and Their Musical Characteristics')
+fig.show()
+
+
+#################### 4. Clustering Genres with K-Means ####################
+# K-Means 클러스터링을 사용하여 장르 군집화
+cluster_pipeline = Pipeline([('scaler', StandardScaler()), ('kmeans', KMeans(n_clusters=10, n_jobs=-1))])
+X = genre_data.select_dtypes(np.number)
+cluster_pipeline.fit(X)
+genre_data['cluster'] = cluster_pipeline.predict(X)
+
+# t-SNE를 사용하여 클러스터 시각화
+tsne_pipeline = Pipeline([('scaler', StandardScaler()), ('tsne', TSNE(n_components=2, verbose=1))])
+genre_embedding = tsne_pipeline.fit_transform(X)
+projection = pd.DataFrame(columns=['x', 'y'], data=genre_embedding)
+projection['genres'] = genre_data['genres']
+projection['cluster'] = genre_data['cluster']
+
+fig = px.scatter(
+    projection, x='x', y='y', color='cluster', hover_data=['x', 'y', 'genres'])
+fig.show()
+
+
+#################### 5. Clustering Songs with K-Means ####################
+# K-Means 클러스터링을 사용하여 곡 군집화
+song_cluster_pipeline = Pipeline([('scaler', StandardScaler()), 
+                                  ('kmeans', KMeans(n_clusters=20, 
+                                   verbose=False, n_jobs=4))
+                                 ], verbose=False)
+
+X = data.select_dtypes(np.number)
+number_cols = list(X.columns)
+song_cluster_pipeline.fit(X)
+song_cluster_labels = song_cluster_pipeline.predict(X)
+data['cluster_label'] = song_cluster_labels
+
+# PCA를 사용하여 클러스터 시각화
+pca_pipeline = Pipeline([('scaler', StandardScaler()), ('PCA', PCA(n_components=2))])
+song_embedding = pca_pipeline.fit_transform(X)
+projection = pd.DataFrame(columns=['x', 'y'], data=song_embedding)
+projection['title'] = data['name']
+projection['cluster'] = data['cluster_label']
+
+fig = px.scatter(
+    projection, x='x', y='y', color='cluster', hover_data=['x', 'y', 'title'])
 fig.show()
