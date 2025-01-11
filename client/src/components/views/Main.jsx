@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import Header from '../utils/Header/Header';
 
 const Main = () => {
   return (
     <Container>
-      <HeaderText>🎧 SpotifyRec</HeaderText>
-      <Header>
+      <Header />
+      <HeaderContainer>
         <Title>Find songs <br /> that beat your heart</Title>
         <Subtitle>Talk freely and our AI will fit the best songs for you</Subtitle>
-      </Header>
+      </HeaderContainer>
       <SearchBar>
         <SearchInput type="text" placeholder="✨ I’m looking for..." />
       </SearchBar>
@@ -38,7 +39,7 @@ const Container = styled.div`
   min-height: 100vh;
 `;
 
-const Header = styled.header`
+const HeaderContainer = styled.header`
   margin-bottom: 30px;
 `;
 
@@ -94,17 +95,10 @@ const AskLink = styled.a`
   white-space: nowrap;
 `;
 
-
-const HeaderText = styled.h2`
-  font-size: 1em;
-  margin-bottom: 80px;
-  color: #fff;
-`;
-
 const AskText = styled.p`
   color: gray;
   font-size: 1em;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 `;
 
 export default Main;
