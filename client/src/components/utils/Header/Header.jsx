@@ -9,6 +9,6 @@ const Header = () => (
 
 const HeaderText = styled.h2`
   font-size: 1em;
-  margin-bottom: 80px;
+  margin-bottom: 40px;
   color: #fff;
 `;

@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../utils/Header/Header';
 
 const Main = () => {
+  const [inputValue, setInputValue] = useState('');
+  const navigate = useNavigate();
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      navigate('/chat');
+    }
+  };
+
   return (
     <Container>
       <Header />
@@ -11,7 +21,13 @@ const Main = () => {
         <Subtitle>Talk freely and our AI will fit the best songs for you</Subtitle>
       </HeaderContainer>
       <SearchBar>
-        <SearchInput type="text" placeholder="✨ I’m looking for..." />
+        <SearchInput
+          type="text"
+          placeholder="✨ I’m looking for..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={handleKeyPress}
+        />
       </SearchBar>
       <AskText>You may ask</AskText>
       <Suggestions>
@@ -62,6 +78,7 @@ const SearchBar = styled.div`
 
 const SearchInput = styled.input`
   width: 60%;
+  max-width: 600px;
   padding: 15px;
   border-radius: 25px;
   border: none;
