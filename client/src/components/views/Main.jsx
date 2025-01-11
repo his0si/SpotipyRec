@@ -1,0 +1,110 @@
+import React from 'react';
+import styled from 'styled-components';
+
+const Main = () => {
+  return (
+    <Container>
+      <HeaderText>🎧 SpotifyRec</HeaderText>
+      <Header>
+        <Title>Find songs <br /> that beat your heart</Title>
+        <Subtitle>Talk freely and our AI will fit the best songs for you</Subtitle>
+      </Header>
+      <SearchBar>
+        <SearchInput type="text" placeholder="✨ I’m looking for..." />
+      </SearchBar>
+      <AskText>You may ask</AskText>
+      <Suggestions>
+        <SuggestionCard text="Can you recommend some great songs in this category for me? I love K-pop!" />
+        <SuggestionCard text="Show me the perfect song for me! My favorite is 'Butter' by BTS." />
+        <SuggestionCard text="Help me discover some quality music! I especially enjoy songs from the 2020s." />
+        <SuggestionCard text="I’m looking for meaningful and emotional songs." />
+      </Suggestions>
+    </Container>
+  );
+};
+
+const SuggestionCard = ({ text }) => (
+  <Card>
+    <p>{text}</p>
+    <AskLink href="#">Ask this ↗</AskLink>
+  </Card>
+);
+
+const Container = styled.div`
+  background-color: #1e1e1e;
+  color: #fff;
+  text-align: center;
+  padding: 50px;
+  min-height: 100vh;
+`;
+
+const Header = styled.header`
+  margin-bottom: 30px;
+`;
+
+const Title = styled.h1`
+  font-size: 3em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`;
+
+const Subtitle = styled.p`
+  font-size: 1.2em;
+`;
+
+const SearchBar = styled.div`
+  margin-bottom: 40px;
+`;
+
+const SearchInput = styled.input`
+  width: 60%;
+  padding: 15px;
+  border-radius: 25px;
+  border: none;
+  font-size: 1em;
+`;
+
+const Suggestions = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+`;
+
+const Card = styled.div`
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  position: relative;
+`;
+
+const AskLink = styled.a`
+  color: #ff7e5f;
+  text-decoration: none;
+  position: relative;
+  width: auto;
+  margin-top: auto;
+  white-space: nowrap;
+`;
+
+
+const HeaderText = styled.h2`
+  font-size: 1em;
+  margin-bottom: 80px;
+  color: #fff;
+`;
+
+const AskText = styled.p`
+  color: gray;
+  font-size: 1em;
+  margin-bottom: 20px;
+`;
+
+export default Main;
