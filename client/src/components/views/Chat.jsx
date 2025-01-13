@@ -12,8 +12,23 @@ const Chat = () => {
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      setResponse(`You entered: ${input}`);
-      setInput('');
+      fetch('http://localhost:5000/recommend', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ song: input }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.recommendations) {
+            setResponse(data.recommendations.join(', '));
+          } else {
+            setResponse('No recommendations found.');
+          }
+          setInput('');
+        })
+        .catch(error => console.error('Error:', error));
     }
   };
 
@@ -28,6 +43,7 @@ const Chat = () => {
           onKeyPress={handleKeyPress}
           placeholder={input || "✨ I’m looking for..."}
         />
+        {response && <Response>{response}</Response>}
       </ChatContainer>
     </Container>
   );
@@ -45,7 +61,6 @@ const ChatContainer = styled.div`
   margin-top: 20px;
 `;
 
-
 const Input = styled.input`
   width: 800px;
   padding: 15px;
@@ -57,6 +72,15 @@ const Input = styled.input`
   color: #fff;
   outline: none;
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+`;
+
+const Response = styled.div`
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #444;
+  color: #fff;
+  border-radius: 10px;
+  text-align: center;
 `;
 
 export default Chat;

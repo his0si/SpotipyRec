@@ -1,37 +1,31 @@
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
-import pprint
-import os
-from dotenv import load_dotenv
+from flask import Flask, request, jsonify
+from ChatModel import ChatModel  # ChatModel을 Chat.py에서 임포트
+from flask_cors import CORS
 
-# .env 파일 로드
-load_dotenv()
+app = Flask(__name__)  # Flask 애플리케이션 인스턴스 생성
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-try:
-    # Spotify 앱의 상세 정보 설정
-    spotify_details = {
-        "client_id": os.getenv("SPOTIFY_CLIENT_ID"),      # 환경 변수에서 가져오기
-        "client_secret": os.getenv("SPOTIFY_CLIENT_SECRET"), # 환경 변수에서 가져오기
-        "redirect_uri": "http://localhost:8080"
-    }
+@app.route('/chat', methods=['POST'])  # '/chat' 경로에 POST 요청을 처리하는 라우트 추가
+def chat():
+    user_message = request.json.get('message')  # JSON에서 사용자 메시지 추출
+    if not user_message:
+        return jsonify({"error": "No message provided"}), 400  # 메시지가 없을 경우 오류 반환
 
-    # Spotify API 접근 권한 (scope)
-    scope = "user-library-read"
+    chat_model = ChatModel()  # ChatModel 인스턴스 생성
+    response = chat_model.get_response(user_message)  # 챗봇 응답 생성
+    return jsonify({"response": response})  # JSON 형식으로 응답 반환
 
-    # Spotipy 클라이언트 생성
-    sp = spotipy.Spotify(
-        auth_manager=SpotifyOAuth(
-            client_id=spotify_details['client_id'],
-            client_secret=spotify_details['client_secret'],
-            redirect_uri=spotify_details['redirect_uri'],
-            scope=scope,
-            open_browser=True
-        )
-    )
+@app.route('/recommend', methods=['POST'])
+def recommend():
+    song_name = request.json.get('song')
+    if not song_name:
+        return jsonify({"error": "No song name provided"}), 400
 
-    # 아티스트 검색 예제
-    result = sp.search('iu', limit=2, type='artist')
-    pprint.pprint(result)
+    # Use the recommend_songs function from model.py
+    from model import recommend_songs
+    recommendations = recommend_songs(song_name)
 
-except Exception as e:
-    print(f"에러가 발생했습니다: {str(e)}")
+    return jsonify({"recommendations": recommendations})
+
+if __name__ == '__main__':
+    app.run(debug=True)  # Flask 애플리케이션 실행

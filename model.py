@@ -33,8 +33,8 @@ def recommend_songs(song_name, n_recommendations=5):
     반환값:
     - recommendations: 추천 곡 이름의 리스트
     """
-    # 데이터셋에서 곡의 인덱스 찾기
-    song_index = data[data['name'] == song_name].index[0]
+    # 데이터셋에서 곡의 인덱스 찾기 (대소문자 무시)
+    song_index = data[data['name'].str.lower() == song_name.lower()].index[0]
 
     # 곡의 특성 벡터 가져오기
     song_vector = X_scaled[song_index].reshape(1, -1)

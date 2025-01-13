@@ -2,4 +2,6 @@ spotipy==2.23.0
 python-dotenv==1.0.0
 seaborn
 plotly
-yellowbrick 
+yellowbrick
+flask-cors
+concurrently --save-dev

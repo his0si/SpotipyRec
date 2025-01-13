@@ -6,10 +6,26 @@ import Header from '../utils/Header/Header';
 const Main = () => {
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
+  const [recommendations, setRecommendations] = useState('');
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      navigate('/chat');
+      fetch('http://localhost:5000/recommend', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ song: inputValue }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.recommendations) {
+            setRecommendations(data.recommendations.join(', '));
+          } else {
+            setRecommendations('No recommendations found.');
+          }
+        })
+        .catch(error => console.error('Error:', error));
     }
   };
 
@@ -36,6 +52,7 @@ const Main = () => {
         <SuggestionCard text="Help me discover some quality music! I especially enjoy songs from the 2020s." />
         <SuggestionCard text="I’m looking for meaningful and emotional songs." />
       </Suggestions>
+      {recommendations && <RecommendationResult>{recommendations}</RecommendationResult>}
     </Container>
   );
 };
@@ -116,6 +133,15 @@ const AskText = styled.p`
   color: gray;
   font-size: 1em;
   margin-bottom: 50px;
+`;
+
+const RecommendationResult = styled.div`
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #444;
+  color: #fff;
+  border-radius: 10px;
+  text-align: center;
 `;
 
 export default Main;
