@@ -24,6 +24,7 @@ const Main = () => {
           } else {
             setRecommendations('No recommendations found.');
           }
+          setInputValue('');
         })
         .catch(error => console.error('Error:', error));
     }
