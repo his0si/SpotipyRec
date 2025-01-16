@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../utils/Header/Header';
 
 const Main = () => {
   const [inputValue, setInputValue] = useState('');
-  const navigate = useNavigate();
   const [recommendations, setRecommendations] = useState('');
 
   const handleKeyPress = (event) => {
