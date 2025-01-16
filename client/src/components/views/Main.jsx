@@ -135,12 +135,13 @@ const AskText = styled.p`
 `;
 
 const RecommendationResult = styled.div`
-  margin-top: 20px;
+  margin: 20px auto;
   padding: 20px;
-  background-color: #444;
+  background-color: #333;
   color: #fff;
   border-radius: 10px;
   text-align: center;
+  width: 1000px;
 `;
 
 export default Main;
